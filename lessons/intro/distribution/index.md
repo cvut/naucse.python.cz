@@ -32,7 +32,7 @@ Než se pustíme do samotného výkladu, zavedeme některé pojmy tak,
 aby mezi nimi nedošlo v textu záměně.
 Anglické pojmy v závorce jsou převzaty z oficiálního [glosáře](https://packaging.python.org/glossary).
 
-* **(implantovatelný) modul** (_Module_ ∪ _Import Package_) je cokoliv,
+* **(importovatelný) modul** (_Module_ ∪ _Import Package_) je cokoliv,
   co se dá importovat z Pythonu, v tomto textu tedy především Python soubor nebo adresář s nimi;
 * **balíček** (_Distribution Package_) je instalovatelný archiv obsahují
   _importovatelné moduly_ pro Python a další potřebné soubory, může být i rozbalený;
