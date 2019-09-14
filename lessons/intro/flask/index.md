@@ -380,7 +380,7 @@ V šabloně pak například:
 ### Logování
 
 Při vytváření webové aplikace chcete často komunikovat nejen prostřednictvím 
-HTTP odpovědí na dotazy (ať už ve formě webové stránky, JSON odpovědi či jiném
+HTTP odpovědí na dotazy (ať už ve formě webové stránky, JSON odpovědi či jiného
 formatu), ale také vypisovat různé chybové, informační či ladící hlášky na
 straně serveru. Možností je použít například `print`, ale s ním pravděpodobně
 brzy narazíte na problém, že jednak výstup není konzistentní s jinýmy hláškami
@@ -399,11 +399,11 @@ stačí použít předpřipravený `app.logger`.
 from flask import Flask
 
 app = Flask(__name__)
-app.logger.debug('I\'ve just initialized my Flask app')
+app.logger.debug("I've just initialized the Flask app")
 
 @app.route('/')
 def index():
-    app.logger.warning('Someone is accessing index page!')
+    app.logger.warning('Someone is accessing the index page!')
     return 'Index Page'
 ```
 
@@ -423,7 +423,7 @@ zda zvolit Flask nebo například Django.
 #### create_app factory
 
 Mimo vytváření Flask aplikace přímo v modulu, je možné aplikaci tvořit pomocí
-funkce, tzv. [*application_factory*](https://flask.palletsprojects.com/en/1.1.x/patterns/appfactories/), 
+funkce, tzv. [`application_factory`](https://flask.palletsprojects.com/en/1.1.x/patterns/appfactories/), 
 standardně pojmenované `create_app`. Takový přístup má výhodu, že aplikace se 
 neinicializuje hned při importu modulu, ale až při zavolání funkce. Voláním funkce
 můžete navíc předat i konfigurační parametry (typicky cesta ke konfiguračnímu 
@@ -446,7 +446,7 @@ def create_app(config=None):
 Ve velkých webových aplikacích je již vhodné seskupovat jednotlivé pohledy do
 samostatných celků. K tomuto účelu slouží ve Flasku [blueprinty] (hezky česky 
 „modrák” nebo „modrotisk”). Výhodou je, že můžete vytvořit blueprint (instanci
-třídy [Blueprint]) s několikavview, vlastní `templates` složkou a dalším 
+třídy [Blueprint]) s několika views, vlastní `templates` složkou a dalším 
 nastavením nezávisle na tom, v jaké Flask aplikaci pak bude použitý. Takový 
 blueprint pak můžete využívat i v několika různých aplikacích a snadno tak
 dosáhnout znovupouželnosti.
@@ -525,7 +525,7 @@ def greetings_number():
 
 Flask umí i další věci – například zpracování formulářů, chybové stránky nebo
 přesměrování. Také existuje i řada [rozšíření](https://flask.palletsprojects.com/en/1.1.x/extensions/?highlight=extensions),
-které Vám mohou ušetřit práci s běžnými úkony jako je například správa uživatelů,
+které mohou ušetřit práci s běžnými úkony jako například správa uživatelů,
  tvorba REST API nebo integrace s různými službami.
 
 Všechno to najdete
