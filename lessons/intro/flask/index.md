@@ -480,6 +480,7 @@ from flask import Flask
 from auth.views import auth
 
 app = Flask(__name__)
+# this will create the /auth/login and /auth/logout endpoints
 app.register_blueprint(auth, url_prefix='/auth')
 ```
 
