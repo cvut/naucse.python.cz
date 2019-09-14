@@ -304,9 +304,7 @@ V šabloně `date_example.html` se pak filtr použije pomocí svislítka:
 ```
 {% endraw %}
 
-Pokud chcete použít nějaký velmi obecný filtr, pak je vhodné se před
-jeho implementací podívat do [seznamu vestavěných filtrů](https://jinja.palletsprojects.com/en/2.10.x/templates/#builtin-filters)
-přímo v Jinja, abyste jej zbytečně neimplementovali znovu. 
+Pokud potřebujete velmi obecný filtr, je vhodné se podívat do [seznamu těch vestavěných](https://jinja.palletsprojects.com/en/2.10.x/templates/#builtin-filters).
 
 #### Escaping
 
@@ -382,11 +380,11 @@ V šabloně pak například:
 Při vytváření webové aplikace chcete často komunikovat nejen prostřednictvím 
 HTTP odpovědí na dotazy (ať už ve formě webové stránky, JSON odpovědi či jiného
 formatu), ale také vypisovat různé chybové, informační či ladící hlášky na
-straně serveru. Možností je použít například `print`, ale s ním pravděpodobně
-brzy narazíte na problém, že jednak výstup není konzistentní s jinýmy hláškami
-produkovanými Flaskem, ale především, že pro různé typy výpisů, časová razítka,
-přesměrování logu do souboru a další potřebujete vytvářet spoustu logiky kolem
-namísto vytváření samotné webové aplikace.
+straně serveru. Možností je použít například funkci `print`, ale ta není 
+dostatečně flexibilní. Brzy narazíte na problémy, jako že výstup není konzistentní 
+s jinými hláškami z Flasku, že pro různé typy výpisů, časová razítka, přesměrování 
+logu do souboru a další potřebujete vytvářet spoustu logiky kolem namísto vytváření 
+samotné webové aplikace.
 
 Řešením je použít standardní logovací modul [logging], který řeší vše potřebné 
 (úrovně zpráv, filtry, formátování časového razítka a dalších meta-informací o
@@ -417,8 +415,16 @@ Ve výchozím nastavení se loguje pouze od úrovně upozornění výše (`warni
 ### Větší Flask aplikace
 
 Flask je sice označován jako mikroframework, to ale neznamená, že jej nelze 
-použít na větší a složitější webové aplikace. Samozřejmě stojí opět za zvážení, 
-zda zvolit Flask nebo například Django.
+použít na větší a složitější webové aplikace. Pokud chcete vytvářet vytvářet 
+aplikaci s databází a ORM modely, je nutné propojit Flask s dalšími knihovnami
+(například [flask-sqlalchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/), 
+nebo [flask-pymongo](https://flask-pymongo.readthedocs.io/en/latest/)).
+
+Jiné frameworky postavené nad [Model-View-Controller](https://cs.wikipedia.org/wiki/Model-view-controller)
+paradigmatem mají tyto vlastnosti již zabudovány v sobě (například [Django]).
+
+Následující sekce popisují některé zajímavé techniky, které se mohou u větších 
+a složitějších aplikací hodit.
 
 #### create_app factory
 
