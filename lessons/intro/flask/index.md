@@ -451,7 +451,8 @@ def create_app(config=None):
 
 Ve velkých webových aplikacích je již vhodné seskupovat jednotlivé pohledy do
 samostatných celků. K tomuto účelu slouží ve Flasku [blueprinty] (hezky česky 
-„modrák” nebo „modrotisk”). Výhodou je, že můžete vytvořit blueprint (instanci
+„modrotisk” nebo také [„modrák”](https://cs.wikipedia.org/wiki/Diazotypie)).
+Výhodou je, že můžete vytvořit blueprint (instanci
 třídy [Blueprint]) s několika views, vlastní `templates` složkou a dalším 
 nastavením nezávisle na tom, v jaké Flask aplikaci pak bude použitý. Takový 
 blueprint pak můžete využívat i v několika různých aplikacích a snadno tak
