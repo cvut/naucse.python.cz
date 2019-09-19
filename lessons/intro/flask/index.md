@@ -410,7 +410,7 @@ Ve výchozím nastavení se loguje pouze od úrovně upozornění výše (`warni
 (navíc i `debug` a `info`). Aktuální úroveň je možné také změnit pomocí metody
 `setLevel`, viz dokumentace modulu [logging].
 
-[logging]: (https://docs.python.org/3/library/logging.html#module-logging)
+[logging]: https://docs.python.org/3/library/logging.html#module-logging
 
 ### Větší Flask aplikace
 
