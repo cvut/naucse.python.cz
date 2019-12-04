@@ -192,7 +192,7 @@ ale typicky to v každém programu potřebujete napsat jen jednou.
 > [note]
 > V Pythonu verze 3.4 a nižší ještě neexistovala klíčová slova `async` a
 > `await`; asynchronní funkce byly implementovány jako generátory.
-> Máte-li starší verzi Pythonu, je potřeba místo:
+> Ve starších verzích Pythonu bylo potřeba místo:
 >
 > ```python
 > async def ...:
@@ -209,6 +209,7 @@ ale typicky to v každém programu potřebujete napsat jen jednou.
 >
 > Starý způsob zatím funguje i v novějším Pythonu a dokonce se ještě někdy
 > objeví i v dokumentaci.
+> Od Pythonu 3.8 je ale *deprecated*.
 
 [greenlet]: https://greenlet.readthedocs.io/en/latest/
 [Tornado]: http://www.tornadoweb.org/en/stable/
@@ -254,7 +255,7 @@ Smyčka událostí provádí úlohy a asynchronní funkce.
 Asynchronní funkce se definují pomocí `async def` a umožňují použít příkaz
 (nebo operátor) `await`, kterým se provádění funkce pozastaví a kontrola se
 předá jiným úlohám do doby, než nastane nějaká událost (např. uplynul časový
-intervaluj, jsou dostupná nová data ze socketu, …).
+intervaluj, jsou dostupná nová data ze socketu…).
 
 Pozastavení funguje podobně jako `yield` u generátoru.
 
@@ -280,7 +281,7 @@ Demo
 ```
 
 V rámci jedné *coroutine* pak lze provedení jiné *coroutine* naplánovat
-a počkat na její skončení pomocí `await`.
+a počkat na jejich skončení pomocí `await`.
 Jak `run_until_complete` tak `await` nám dají k dispozici návratovou hodnotu
 příslušné asynchronní funkce.
 
@@ -380,7 +381,7 @@ Poté může pokračovat zpracováním získaných dat.
 
 Počkáním na úlohu (pomocí `await`, `gather`, `run_until_complete` atp.)
 získáte její návratovou hodnotu.
-Ale na všechny úlohy, i na ty které nic zajímavého nevrací, je důležité počkat.
+Ale na všechny úlohy, i na ty, které nic zajímavého nevrací, je důležité počkat.
 Neuděláte-li to, bude `asyncio` vypisovat varovné hlášky:
 
 ```pycon
