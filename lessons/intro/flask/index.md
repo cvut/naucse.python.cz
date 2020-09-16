@@ -37,7 +37,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return 'MI-PYT je nejlepší předmět na FITu!'
+    return 'NI-PYT je nejlepší předmět na FITu!'
 
 ```
 
@@ -508,14 +508,14 @@ spoustu dalšího. Nezapomeňte volat konstruktor nadtřídy.
 ```python
 from flask import current_app, Flask, Response
 
-class MIPYTResponse(Response):
+class NIPYTResponse(Response):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.set_cookie('MI-PYT', 'best')
+        self.set_cookie('NI-PYT', 'best')
 
 
 class GreeterApp(Flask):
-    response_class = MIPYTResponse
+    response_class = NIPYTResponse
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

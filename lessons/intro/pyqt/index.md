@@ -37,7 +37,7 @@ Pokud nic z toho nepomůže, můžete zkusit přeložit PyQt5 ze [zdrojových so
 *První aplikace* níže by vám měla fungovat.
 
 > [note]
-> Pokud narazíte na chybu `Could not find or load the Qt platform plugin "xcb"`, podívejte se do [naší issue](https://github.com/cvut/MI-PYT/issues/57).
+> Pokud narazíte na chybu `Could not find or load the Qt platform plugin "xcb"`, podívejte se do [naší issue](https://github.com/cvut/NI-PYT/issues/57).
 
 ### Qt5 Designer
 
