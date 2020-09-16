@@ -1,0 +1,54 @@
+title: NI-PYT (Pokročilý Python)
+subtitle: ČVUT - zimní semestr 2020/2021
+time: 12:45–15:00
+default_time:
+  start: '12:45'
+  end: '15:00'
+place: online
+description: Poznej zajímavé knihovny Pythonu
+long_description: |
+    Cílem předmětu je naučit se různé pokročilé techniky a postupy programování v jazyce Python.
+    Předmět nepřímo navazuje na Programování v Pythonu (BI-PYT).
+    Předmět je zaměřen prakticky a má pouze cvičení, vše je prezentováno na příkladech.
+    Hodnocení je založeno na práci na cvičeních a semestrální práci.
+    Výuka předmětu probíhá pod vedením pracovníků z firmy Red Hat.
+vars:
+  coach-present: true
+  mi-pyt: true
+derives: mi-pyt
+plan:
+- base: requests-click
+  date: 2020-09-23
+
+- base: flask
+  date: 2020-09-30
+
+- base: pandas
+  date: 2020-10-07
+
+- base: distribution
+  date: 2020-10-14
+
+- base: numpy
+  date: 2020-10-21
+
+- base: testing
+  date: 2020-11-04
+
+- base: cython
+  date: 2020-11-11
+
+- base: docs
+  date: 2020-11-18
+
+- base: qt
+  date: 2020-11-25
+
+- base: async
+  date: 2020-12-02
+
+- base: magic
+  date: 2020-12-09
+
+- base: upy
+  date: 2020-12-16
