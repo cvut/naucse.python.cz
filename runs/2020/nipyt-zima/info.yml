@@ -25,12 +25,20 @@ plan:
 
 - base: pandas
   date: 2020-10-07
+  materials:
+  - lesson: intro/notebook
+  - lesson: intro/pandas
 
 - base: distribution
   date: 2020-10-14
 
 - base: numpy
   date: 2020-10-21
+  materials:
+  - lesson: intro/numpy
+  - title: Tahák na NumPy
+    url: https://pyvec.github.io/cheatsheets/numpy/numpy-cs.pdf
+    type: cheatsheet
 
 - base: testing
   date: 2020-11-04
