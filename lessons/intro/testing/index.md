@@ -732,66 +732,71 @@ Na to uživatel spustí pytest samotný.
 
 Další informace jsou v [dokumentaci pytestu](http://doc.pytest.org/en/latest/goodpractices.html#integrating-with-setuptools-python-setup-py-test-pytest-runner).
 
-Travis CI
----------
+GitHub Actions
+--------------
 
 Vaše testy nemusí běžet jen u vás na počítači, ale můžete je pouštět automaticky
-na službě Travis CI při každém pushnutí na GitHub.
+pomocí služby [GitHub Actions] (případně jiného CI).
 
-Travis CI je zadarmo pro veřejné repozitáře na [travis-ci.org], pro soukromé
-repozitáře je placená verze na [travis-ci.com]. V rámci studentského balíčku
-můžete i tuto verzi využít zdarma.
+[GitHub Actions] je služba pro běh workflow spouštěných různými událostmi na GitHubu.
+Tato služba je zadarmo pro veřejné repozitáře (pro privátní je zdarma jen omezený 
+počet minut běhu měsíčně). Pod workflow si můžete představit skript složený z více 
+kroků, které se za sebou spouští na vzdáleném (virtuálním) stroji.
+ 
+Přesvědčte se, že v *Settings > Actions* vašeho repozitáře jsou *Actions* povolené.
+Do repozitáře přidejte soubor `.github/workflows/main.yml`:
 
-Přihlaste se na [travis-ci.com] pomocí GitHubu (vpravo nahoře).
-Pak opět vpravo nahoře zvolte [Accounts](https://travis-ci.com/profile)
-a povolte Travis pro váš repozitář.
-
-Do repozitáře přidejte soubor `.travis.yml`:
-
+{% raw %}
 ```yaml
-language: python
-python:
-- '3.6'
-install:
-- python setup.py install
-script:
-- python setup.py test
+name: Test my package
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install package
+      run:  python setup.py install
+    - name: Run tests
+      run:  python setup.py test
 ```
+{% endraw %}
 
-Uvedený příklad je pro Python 3.6.
-Pro Python 3.7 je třeba nastavit novější verzi Ubuntu:
+Verze Pythonu lze kombinovat pomocí tzv. *matrix*:
 
+{% raw %}
 ```yaml
-language: python
-python:
-- '3.7'
-dist: xenial
-install:
-- python setup.py install
-script:
-- python setup.py test
+name: Test my package
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install package
+      run:  python setup.py install
+    - name: Run tests
+      run:  python setup.py test
 ```
+{% endraw %}
 
-Verze Pythonu lze kombinovat:
-
-```yaml
-language: python
-python:
-- '3.6'
-- '3.7'
-dist: xenial
-install:
-- python setup.py install
-script:
-- python setup.py test
-```
-
-Po pushnutí by se na Travisu měl automaticky spustit test.
+Po pushnutí by mělo workflow automaticky spustit a na záložce *Actions* si můžete
+jednotlivé běhy procházet. Současně se u daného commitu nastavuje status.
 Více informací o použití pro Python najdete
-v [dokumentaci](https://docs.travis-ci.com/user/languages/python/).
+v [dokumentaci](https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-python).
 
-[travis-ci.org]: https://travis-ci.org/
-[travis-ci.com]: https://travis-ci.com/
+[GitHub Actions]: https://docs.github.com/en/free-pro-team@latest/actions
 
 Kvíz
 ----
