@@ -697,40 +697,112 @@ protože by tam kolidovaly s ostatními testy z jiných balíčků.
 Případné soubory potřebné k testování bývá zvykem dávat do složky `fixtures` ve
 složce s testy.
 
-Spouštění testů pomocí `setup.py test`
---------------------------------------
+Spouštění testů pomocí `tox` a specifikace testovacích závislostí
+-----------------------------------------------------------------
 
-Standardně se testy v Pythonu nespouští pomocí `python -m pytest`, ale
-`python setup.py test`, což funguje i s jinými nástroji než je pytest.
-Pokud pytest používáme, je proto dobré `setup.py` naučit spouštět pytest.
+Framework pytest je jen jedním (byť oblíbeným) z mnoha způsobů,
+jak v Pythonu psát a spouštět testy.
+Bohužel neexistuje jednotný standardizovaný způsob,
+jak definovat závislosti potřebné k testování Python balíčku a způsob jejich spouštění.
 
-K tomu potřebujeme nakonfigurovat závislosti: v `setup_requires` musí být
-`pytest-runner` a v `tests_require` pak `pytest` a další testovací závislosti
-(`flexmock`, `betamax`...).
+Dříve standardizovaný způsob, spouštění testů pomocí `python setup.py test`,
+již není dále doporučovaný, protože nefunguje s projekty bez `setup.py`.
 
-```python
-from setuptools import setup
+Jedním z oblíbených způsobů jak testy zapouzdřit do srozumitelné a relativně standardizované formy
+je použít nástroj [tox](https://tox.readthedocs.io/en/latest/).
 
-setup(
-    ...,
-    setup_requires=['pytest-runner', ...],
-    tests_require=['pytest', ...],
-    ...,
-)
+Tox je potřeba nejdříve nainstalovat.
+Vzhledem k tomu, že si vytváří a spravuje vlastní virtuální prostředí,
+doporučuji se nejprve podívat po distribučním balíčku
+(například na Fedoře `sudo dnf install tox`),
+případně nainstalovat tox pomocí pipu mimo virtuální prostředí
+(`pip install --user tox`, nikdy ne `sudo pip`).
+
+Tox se dá [nakonfigurovat](https://tox.readthedocs.io/en/latest/config.html) například pomocí souboru `tox.ini`:
+
+
+```ini
+[tox]
+envlist = py37,py38,py39
+
+[testenv]
+deps =
+    pytest>=5
+    betamax
+commands = pytest {posargs} tests
 ```
 
-a přidat následující sekci do `setup.cfg`:
+Tox s tímto konfiguračním souborem pro všechny uvedené (3.7, 3.8 a 3.9) a nainstalované verze Pythonu:
 
+ 1. Vytvoří dedikované virtuální prostředí (obvykle ve složce `./.tox`).
+ 2. Nainstaluje do něj z aktuálního adresáře váš balíček (nejprve vytvoří sdist a ten pak nainstaluje).
+ 3. Nainstaluje do něj testovací závislosti (zde `pytest>=5` a `betamax`).
+ 4. Spustí uvedené příkazy. Proměnná `{posargs}` je nahrazena dalšími volbami příkazové řádky.
+
+Tox se pouští příkazem `tox`, jednotlivé volby najdete pomocí `tox --help`.
+Zde uvedeme jen některé:
+
+ - Samotný `tox` spustí postupně všechna prostředí s testy.
+ - Pomocí `tox -l` lze vypsat seznam definovaných prostředí.
+ - Pomocí `tox -e py38` lze vybrat jen některá prostředí.
+ - Pomocí `tox --parallel=auto` lze spustit testovací prostředí souběžně.
+   Vaše testy se musí chovat „společensky“, nesmí se navzájem ovlivňovat.
+ - Pomocí `tox --` (např. `tox -- -k "not slow"`) lze předávat argumenty do `{posargs}`.
+
+Protože ne každý zná `tox`, je dobré způsob spouštění testů popsat v README.
+
+V konfiguračním souboru `tox.ini` můžou být i [volby pro pytest](https://docs.pytest.org/en/stable/customize.html):
+
+```ini
+[tox]
+envlist = py37,py38,py39
+
+[pytest]
+addopts = -v
+testpaths =
+    tests
+
+[testenv]
+deps =
+    pytest>=5
+    betamax
+commands = pytest {posargs}
 ```
-[aliases]
-test=pytest
-```
 
-Příkaz `python setup.py test` by měl fungovat, ale neočekává se, že bude
-podporovat další argumenty pytestu (jako `-v`).
-Na to uživatel spustí pytest samotný.
+Nezapomeňte se ubezpečit, že `tox.ini` je součástí balíčku sdist.
 
-Další informace jsou v [dokumentaci pytestu](http://doc.pytest.org/en/latest/goodpractices.html#integrating-with-setuptools-python-setup-py-test-pytest-runner).
+> [note]
+> Pokud chcete podporovat jak příkaz `tox`, tak i přímé spuštění testů pomocí příkazu `pytest`,
+> můžete testovací závislosti definovat v souboru `setup.py` pomocí tz. [extras](https://setuptools.readthedocs.io/en/latest/userguide/dependency_management.html#optional-dependencies):
+>
+> ```python
+> setup(
+>     ...
+>     extras_require={
+>         "test":  ["pytest>=5", "betamax"],
+>     }
+> )
+> ```
+>
+> Do README pak můžete napsat, že instrukce k testování balíčku jsou:
+>
+>  1. `pip install .[test]`
+>  2. `pytest`
+>
+> V `tox.ini` pak místo `deps` uvedete `extras`:
+> ```ini
+> [testenv]
+> extras = test
+> commands = pytest {posargs} 
+> ```
+
+Všimněte si, že `tox` je primárně spjatý s testováním na více Python verzích.
+To je při vývoji softwaru často potřeba. Pokud chcete testovat s „hlavní“ verzí Pythonu,
+můžete použít prostředí s názvem `py3`.
+
+[Tox toho umí spoustu](https://tox.readthedocs.io/en/latest/examples.html)
+a účelem tohoto krátkého přestavení není kompletní obeznámení s tímto nástrojem,
+ale pouze rychlé seznámení za účelem definovaní testovacích závislostí a spouštění testů.
 
 GitHub Actions
 --------------
@@ -754,19 +826,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout the repository
+      uses: actions/checkout@v2
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
-    - name: Install package
-      run:  python setup.py install
+    - name: Install tox
+      run:  python -m pip install tox
     - name: Run tests
-      run:  python setup.py test
+      run:  tox -e py3
 ```
 {% endraw %}
 
-Verze Pythonu lze kombinovat pomocí tzv. *matrix*:
+Verze Pythonu lze kombinovat pomocí tz. *matrix*:
 
 {% raw %}
 ```yaml
@@ -779,24 +852,35 @@ jobs:
       matrix:
         python-version: [3.7, 3.8, 3.9]
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout the repository
+      uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install package
-      run:  python setup.py install
+    - name: Install tox
+      run:  python -m pip install tox
     - name: Run tests
-      run:  python setup.py test
+      run:  tox -e py3
 ```
 {% endraw %}
 
+> [note]
+> Jistě si všimnete, že v *matrix* se duplikují informace z `tox.ini`.
+> Je to proto, že v GitHub Actions obvykle chcete pouštět jednotlivá prostředí na jiném vzdáleném stroji, souběžně.
+> Musí proto znát dopředu jejich konfiguraci.
+
 Po pushnutí by mělo workflow automaticky spustit a na záložce *Actions* si můžete
 jednotlivé běhy procházet. Současně se u daného commitu nastavuje status.
+V případě Pull Requestu můžete zkontrolovat výsledek předtím,
+než se rozhodnete o začlenění.
 Více informací o použití pro Python najdete
 v [dokumentaci](https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-python).
 
 [GitHub Actions]: https://docs.github.com/en/free-pro-team@latest/actions
+
+Pro GitLab existuje podobný nástroj, GitLab CI, který se samozřejmě konfiguruje jinak,
+ale principy jsou stejné.
 
 Kvíz
 ----
