@@ -390,29 +390,41 @@ import sys
 sys.path.insert(0, os.path.abspath('..'))
 ```
 
-### Travis CI
+### GitHub Actions
 
 Neexistuje zatím unifikovaný způsob, jak specifikovat závislosti pro sestavení
 dokumentace. Proto, pokud chcete mít nějaký jednoduchý způsob, jak pouštět
-doctesty na Travisu, vytvořte například soubor `docs/requirements.txt`
+doctesty na GitHub Actions, vytvořte například soubor `docs/requirements.txt`
 a do něj dejte závislosti potřebné pro sestavení dokumentace.
 Je na vás, jestli tam budou pouze extra závislosti oproti těm v `setup.py`
 (většinou pouze `sphinx`), nebo všechny závislosti, aby šel použít soubor
 samostatně.
 
-Poté na Travisu můžete udělat něco jako:
+Poté na GitHub Actions můžete udělat něco jako:
+
+{% raw %}
 
 ```yaml
-language: python
-python:
-- '3.7'
-install:
-- python setup.py install
-- pip install -r docs/requirements.txt
-script:
-- python setup.py test --addopts -v
-- cd docs && make doctest
+name: Test my package
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    # ... other steps (e.g. install and test)
+    - name: Install docs dependencies
+      run:  pip install -r docs/requirements.txt
+    - name: Run doctests
+      run:  cd docs && make doctest
 ```
+
+{% endraw %}
 
 > [note]
 > Chcete-li jít s dobou, můžete vyzkoušet strukturovaný způsob závislostí
@@ -432,8 +444,7 @@ script:
 > jméno *extras* v hranatých závorkách):
 >
 > ```
-> install:
-> - python -m pip install .[dev]
+> pip install .[dev]
 > ```
 
 
