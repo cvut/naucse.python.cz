@@ -446,6 +446,8 @@ jobs:
 > ```
 > pip install .[dev]
 > ```
+>
+> Případně se dá přidat `docs` (nebo `doc`) testenv do nástroje [tox](https://tox.readthedocs.io/).
 
 
 autodoc
